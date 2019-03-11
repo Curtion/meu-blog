@@ -3,11 +3,11 @@ const Router = require("koa-router");//koa路由
 const Koapost = require("koa-body");//基于koa的post接收库
 const jwt = require("jwt-simple");//json web token库
 const config = require("./config/config");//配置文件
-const sql = require("./config/sql");//mysql封装类
+const sqlLib = require("./config/sql");//mysql封装类
 const jstSecret = config.jstSecret;//token密钥
 const app = new Koa();
 const router = new Router();
-const sqlQuery = new sql();
+const SqlQuery = new sqlLib();
 
 app.use(Koapost());//获得post信息
 
@@ -19,8 +19,8 @@ app.use(router.routes());//挂载登陆注册中间件
 app.use(async (ctx, next) => {
     if (ctx.request.header.authorization !== undefined) {
         let user = jwt.decode(ctx.request.header.authorization, jstSecret);
-        let con = await sqlQuery.query("SELECT * FROM user WHERE name=?", [user.sub]);
-        if(con.length === 1){
+        let res = await SqlQuery.query("SELECT * FROM user WHERE name=?", [user.sub]);
+        if(res.length === 1){
             if(Date.now() > user.exp){
                 ctx.response.status = 403;
                 ctx.response.body = {
@@ -28,6 +28,7 @@ app.use(async (ctx, next) => {
                     "status": "-1"
                 }
             }else{
+                ctx.state.username = user.sub; 
                 await next();
             }
         }else{
