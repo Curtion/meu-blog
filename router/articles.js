@@ -1,20 +1,24 @@
 const Router = require("koa-router");
 const article = new Router();
-const sqlLib = require("../config/sql");
-const SqlQuery = new sqlLib();
+// const Sql = require("../config/sql");
+// const SqlQuery = new Sql();
 article.post('/add', async (ctx, next) => {
     let data = ctx.request.body;
-    let arr = [data.title, data.content, data.tag, data.kind]//必填项
+    let arr = ["title", "content", "tag", "kind"]//必填项
     // ctx.state 当前用户名
-    arr.forEach(ele => {
-        if(data.hasOwnProperty(ele)){
-            console.log("验证正确");
+    let resarr = arr.filter(ele => {
+        return data.hasOwnProperty(ele);
+    });
+    if(resarr.length === arr.length){
+        // let sql = "INSERT INTO table_name ( field1, field2,...fieldN ) VALUES ( value1, value2,...valueN )";
+        // let res = await SqlQuery("");
+    }else{
+        ctx.response.status = 200;
+        ctx.response.body = {
+            msg: "参数不能有为空",
+            "status": "-1"
         }
-    })
-    let sql = "INSERT INTO table_name ( field1, field2,...fieldN ) VALUES ( value1, value2,...valueN )";
-    let res = await SqlQuery("");
-    ctx.response.status = 200;
-    ctx.response.body = "article";
+    }
     await next();
 });
 article.get('/list', async (ctx, next) => {
