@@ -1,10 +1,11 @@
 const Router = require("koa-router");
-const article = new Router();
-// const Sql = require("../config/sql");
-// const SqlQuery = new Sql();
-article.post('/add', async (ctx, next) => {
+const articles = new Router();
+const Sql = require("../config/sql");
+const SqlQuery = new Sql();
+articles.post('/add', async (ctx, next) => {
+    console.log(ctx.method);
     let data = ctx.request.body;
-    let arr = ["title", "content", "tag", "kind"]//必填项
+    let arr = ["title", "content", "tag", "kind"];//必填项
     // ctx.state 当前用户名
     let resarr = arr.filter(ele => {
         return data.hasOwnProperty(ele);
@@ -21,9 +22,9 @@ article.post('/add', async (ctx, next) => {
     }
     await next();
 });
-article.get('/list', async (ctx, next) => {
+articles.get('/list', async (ctx, next) => {
     ctx.response.status = 200;
     ctx.response.body = "article/list";
     await next();
 });
-module.exports = article;
+module.exports = articles;

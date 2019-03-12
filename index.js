@@ -18,23 +18,31 @@ app.use(router.routes());//挂载登陆注册中间件
 
 app.use(async (ctx, next) => {
     if (ctx.request.header.authorization !== undefined) {
-        let user = jwt.decode(ctx.request.header.authorization, jstSecret);
-        let res = await SqlQuery.query("SELECT * FROM user WHERE name=?", [user.sub]);
-        if(res.length === 1){
-            if(Date.now() > user.exp){
-                ctx.response.status = 403;
-                ctx.response.body = {
-                    msg: "token已过期，请重新授权",
-                    "status": "-1"
+        try{
+            let user = jwt.decode(ctx.request.header.authorization, jstSecret);
+            let res = await SqlQuery.query("SELECT * FROM user WHERE name=?", [user.sub]);
+            if(res.length === 1){
+                if(Date.now() > user.exp){
+                    ctx.response.status = 403;
+                    ctx.response.body = {
+                        msg: "token已过期，请重新授权",
+                        "status": "-1"
+                    }
+                }else{
+                    ctx.state.username = user.sub;
+                    await next();
                 }
             }else{
-                ctx.state.username = user.sub; 
-                await next();
+                ctx.response.status = 401;
+                ctx.response.body = {
+                    msg: "账号授权失效，请重新授权！",
+                    "status": "-1"
+                }
             }
-        }else{
+        } catch(err){
             ctx.response.status = 401;
             ctx.response.body = {
-                msg: "账号授权失效，请重新授权！",
+                msg: err,
                 "status": "-1"
             }
         }
