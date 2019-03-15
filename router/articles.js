@@ -1,9 +1,10 @@
 const Router = require("koa-router");
+const public = require("../functions/publicFunc");
+const publicFunc = new public();
 const articles = new Router();
-const Sql = require("../config/sql");
-const SqlQuery = new Sql();
+const sql = require("../config/sql");
+const sqlQuery = new sql();
 articles.post('/add', async (ctx, next) => {
-    console.log(ctx.method);
     let data = ctx.request.body;
     let arr = ["title", "content", "tag", "kind"];//必填项
     // ctx.state 当前用户名
@@ -11,7 +12,10 @@ articles.post('/add', async (ctx, next) => {
         return data.hasOwnProperty(ele);
     });
     if(resarr.length === arr.length){
-        // let sql = "INSERT INTO table_name ( field1, field2,...fieldN ) VALUES ( value1, value2,...valueN )";
+        let id = await sqlQuery.query("SELECT MAX(id) FROM post");
+        id = publicFunc.checkMaxId(id);
+        console.log(id);
+        // let sql = "INSERT INTO post (id, name, title, content, time, tag, kind, last_time) VALUES ( value1, value2,...valueN )";
         // let res = await SqlQuery("");
     }else{
         ctx.response.status = 200;

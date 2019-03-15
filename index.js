@@ -13,12 +13,10 @@ app.use(Koapost());//获得post信息
 
 let token = require(__dirname + '/config/token.js');//加载登陆注册中间件
 router.use('/user', token.routes(), token.allowedMethods());
-app.use(router.routes());//挂载登陆注册中间件
-
 
 app.use(async (ctx, next) => {
     if (ctx.request.header.authorization !== undefined) {
-        try{
+        // try{
             let user = jwt.decode(ctx.request.header.authorization, jstSecret);
             let res = await SqlQuery.query("SELECT * FROM user WHERE name=?", [user.sub]);
             if(res.length === 1){
@@ -39,13 +37,13 @@ app.use(async (ctx, next) => {
                     "status": "-1"
                 }
             }
-        } catch(err){
-            ctx.response.status = 401;
-            ctx.response.body = {
-                msg: err,
-                "status": "-1"
-            }
-        }
+        // } catch(err){
+        //     ctx.response.status = 401;
+        //     ctx.response.body = {
+        //         msg: err,
+        //         "status": "-1"
+        //     }
+        // }
     }else{
         ctx.response.status = 401;
         ctx.response.body = {
