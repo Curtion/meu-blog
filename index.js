@@ -3,11 +3,11 @@ const Router = require("koa-router");//koa路由
 const Koapost = require("koa-body");//基于koa的post接收库
 const jwt = require("jwt-simple");//json web token库
 const config = require("./config/config");//配置文件
-const Sql = require("./config/sql");//mysql封装类
+const sql = require("./config/sql");//mysql封装类
 const jstSecret = config.jstSecret;//token密钥
 const app = new Koa();
 const router = new Router();
-const SqlQuery = new Sql();
+const SqlQuery = new sql();
 
 app.use(Koapost());//获得post信息
 
