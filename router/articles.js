@@ -5,6 +5,9 @@ const articles = new Router();
 const sql = require("../config/sql");
 const sqlQuery = new sql();
 articles.post('/add', async (ctx) => {
+    if(!await publicFunc.checkPermission(ctx)){ //如果没有授权
+        return;
+    }
     let data = ctx.request.body;
     let arr = ["title", "content", "tag", "kind"];//必填项
     let resarr = arr.filter(ele => {

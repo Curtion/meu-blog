@@ -1,3 +1,8 @@
+const sql = require("../config/sql");//mysql封装类
+const config = require("../config/config");//配置文件
+const jwt = require("jwt-simple");//json web token库
+const jstSecret = config.jstSecret;//token密钥
+const SqlQuery = new sql();
 class publicFunc {
     
     /**
@@ -65,6 +70,54 @@ class publicFunc {
         }         
         return fmt;         
     }
-    
+
+
+    /**
+     * 
+     * 检查用户是否授权
+     *
+     * @param {Object} ctx
+     * @returns  {Boolean}
+     * @memberof publicFunc
+     */
+    async checkPermission(ctx){
+        if(ctx.request.header.authorization === undefined){
+            ctx.response.status = 401;
+            ctx.response.body = {
+                "msg": "非授权操作！",
+                "status": "-1"
+            }
+            return false;
+        }
+        try{
+            let user = jwt.decode(ctx.request.header.authorization, jstSecret);
+            let res = await SqlQuery.query("SELECT * FROM user WHERE name=?", [user.sub]);
+            if(res.length !== 1){
+                ctx.response.status = 401;
+                ctx.response.body = {
+                    "msg": "账号授权失效，请重新授权！",
+                    "status": "-1"
+                }
+                return false;
+            }
+            if(Date.now() > user.exp){
+                ctx.response.status = 403;
+                ctx.response.body = {
+                    "msg": "token已过期，请重新授权",
+                    "status": "-1"
+                }
+                return false;
+            }
+            ctx.state.username = user.sub;
+            return true;
+        } catch(err){
+            ctx.response.status = 500;
+            ctx.response.body = {
+                "msg": err,
+                "status": "-1"
+            }
+            return false;
+        }
+    }
 }
 module.exports = publicFunc;
