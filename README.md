@@ -10,7 +10,7 @@
 | :----: | :------: | :---------------------------: |
 |  msg   |   ALL    |      此次操作结果的说明       |
 | status |   ALL    | 状态码；“-1”为错误，”0为正确“ |
-|  data  |  NO ALL  |       返回时携带的数据        |
+|  info  |  NO ALL  |       返回时携带的信息        |
 
 
 
@@ -69,15 +69,6 @@
   }
   ```
 
-### Response
-
-```json
-{
-    "msg": "提交成功",
-    "status": "0"
-}
-```
-
 
 
 ## 查询文章(总)
@@ -86,7 +77,6 @@
 
 - Method： **GET**
 - URL： ```/articles/listarticles/lists/?limit=10&page=1```
-- Headers:**authorization:you_token**
 
 | 参数  |        说明        | 是否必须 |
 | :---: | :----------------: | :------: |
@@ -100,10 +90,12 @@
 ```json
 {
     "msg": "查询成功",
-    "totalCount": "文章总数量",
-    "count": "查询结果的数量",
-    "page": "当前页码",
-    "data": "文章数据",
+    "data": {
+        "totalCount": "文章总数量",
+        "count": "查询结果的数量",
+        "page": "当前页码",
+        "data": "查询结果"
+    },
     "status": "0"
 }
 ```

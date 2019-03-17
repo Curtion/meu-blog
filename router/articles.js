@@ -72,10 +72,12 @@ articles.get('/lists', async (ctx, next) => {
         ctx.response.status = 200;
         ctx.response.body = {
             "msg": "查询成功",
-            "totalCount": count[0]["COUNT(*)"],
-            "count": res.length,
-            "page": ~~data.page,
-            "data": res,
+            "info": {
+                "totalCount": count[0]["COUNT(*)"],
+                "count": res.length,
+                "page": ~~data.page,
+                "data": res
+            },
             "status": "0"
         }
         await next();
