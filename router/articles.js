@@ -47,8 +47,44 @@ articles.post('/add', async (ctx) => {
 });
 
 articles.get('/lists', async (ctx, next) => {
-    ctx.response.status = 200;
-    ctx.response.body = "article/lists";
-    await next();
+    let data = ctx.request.query;
+    if(data === undefined){
+        ctx.response.status = 200;
+        ctx.response.body = {
+            "msg": "请限制查询条数",
+            "status": "-1"
+        }
+        return;
+    }
+    if(data.limit === undefined || data.page === undefined){
+        ctx.response.status = 200;
+        ctx.response.body = {
+            "msg": "查询限制参数有误",
+            "status": "-1"
+        }
+        return;
+    }
+    try{
+        let sql = "SELECT * FROM post LIMIT ?,?";
+        let offset = (data.page-1) * data.limit;
+        let res  = await sqlQuery.query(sql, [~~offset, ~~data.limit]);
+        let count = await sqlQuery.query("SELECT COUNT(*) FROM post");
+        ctx.response.status = 200;
+        ctx.response.body = {
+            "msg": "查询成功",
+            "totalCount": count[0]["COUNT(*)"],
+            "count": res.length,
+            "page": ~~data.page,
+            "data": res,
+            "status": "0"
+        }
+        await next();
+    } catch(err) {
+        ctx.response.status = 500;
+        ctx.response.body = {
+            "msg": err,
+            "status": "-1"
+        }
+    }
 });
 module.exports = articles;

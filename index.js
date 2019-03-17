@@ -7,12 +7,14 @@ const sql = require("./config/sql");//mysql封装类
 const jstSecret = config.jstSecret;//token密钥
 const app = new Koa();
 const router = new Router();
+const RLRouter = new Router(); //登陆注册接口，单独设置一个路由提前挂载
 const SqlQuery = new sql();
 
 app.use(Koapost());//获得post信息
 
 let token = require(__dirname + '/config/token.js');//加载登陆注册中间件
-router.use('/user', token.routes(), token.allowedMethods());
+RLRouter.use('/user', token.routes(), token.allowedMethods());
+app.use(RLRouter.routes()); //挂载
 
 app.use(async (ctx, next) => {  //账号授权检测
     if(ctx.request.header.authorization === undefined){
