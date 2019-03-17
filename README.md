@@ -28,8 +28,8 @@
 
   ```json
   {
-      user: "You name",
-      password: "You password"
+      "user": "You name",
+      "password": "You password"
   }
   ```
 
@@ -62,10 +62,10 @@
 
   ```json
   {
-      title: "文章标题",
-      content: "文章内容",
-      tag: "文章标签,逗号分隔",
-      kind: "文章分类,逗号分隔"
+      "title": "文章标题",
+      "content": "文章内容",
+      "tag": "文章标签,逗号分隔",
+      "kind": "文章分类,逗号分隔"
   }
   ```
 
@@ -101,9 +101,9 @@
 {
     "msg": "查询成功",
     "totalCount": "文章总数量",
-    "count": "查询结果的数量"
+    "count": "查询结果的数量",
     "page": "当前页码",
-    "data"; "文章数据",
+    "data": "文章数据",
     "status": "0"
 }
 ```
