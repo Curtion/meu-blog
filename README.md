@@ -90,7 +90,7 @@
 ```json
 {
     "msg": "查询成功",
-    "data": {
+    "info": {
         "totalCount": "文章总数量",
         "count": "查询结果的数量",
         "page": "当前页码",
