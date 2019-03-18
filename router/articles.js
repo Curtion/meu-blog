@@ -5,7 +5,7 @@ const articles = new Router();
 const sql = require("../config/sql");
 const sqlQuery = new sql();
 articles.post('/add', async (ctx) => {
-    if(!await publicFunc.checkPermission(ctx)){ //如果没有授权
+    if(!await publicFunc.checkPermission(ctx)){ //检查是否授权
         return;
     }
     let data = ctx.request.body;
