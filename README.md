@@ -71,12 +71,12 @@
 
 
 
-## 查询文章(总)
+## 查询文章列表
 
 ### Request
 
 - Method： **GET**
-- URL： ```/articles/listarticles/lists/?limit=10&page=1```
+- URL： ```/articles/lists/?limit=10&page=1```
 
 | 参数  |        说明        | 是否必须 |
 | :---: | :----------------: | :------: |
@@ -95,6 +95,36 @@
         "count": "查询结果的数量",
         "page": "当前页码",
         "data": "查询结果"
+    },
+    "status": "0"
+}
+```
+
+
+
+## 根据ID查询文章
+
+### Request
+
+- Method：**GET**
+
+- URL：```/articles/lists/:id```
+
+  | 参数 |   说明   |
+  | :--: | :------: |
+  | :id  | 帖子的ID |
+
+- eg：```/articles/lists/1```
+
+
+
+### Response
+
+```json
+{
+    "msg": "查询成功",
+    "info": {
+        "data": "文章数据"
     },
     "status": "0"
 }

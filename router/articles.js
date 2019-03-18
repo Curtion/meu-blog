@@ -113,7 +113,7 @@ articles.get('/lists/:id', async (ctx, next)=> {
         ctx.response.body = {
             "msg": "查询成功",
             "info": {
-                "data": res
+                "data": res[0]
             },
             "status": "0"
         }
