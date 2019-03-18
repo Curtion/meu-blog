@@ -62,13 +62,13 @@ articles.get('/lists', async (ctx, next) => {
     if(data.limit === undefined || data.page === undefined){
         ctx.response.status = 200;
         ctx.response.body = {
-            "msg": "查询限制参数有误",
+            "msg": "参数有误",
             "status": "-1"
         }
         return;
     }
     try{
-        let sql = "SELECT * FROM post LIMIT ?,?";
+        let sql = "SELECT id,name,title,time,tag,kind,last_time FROM post LIMIT ?,?";
         let offset = (data.page-1) * data.limit;
         let res  = await sqlQuery.query(sql, [~~offset, ~~data.limit]);
         let count = await sqlQuery.query("SELECT COUNT(*) FROM post");
@@ -92,4 +92,38 @@ articles.get('/lists', async (ctx, next) => {
         }
     }
 });
+
+articles.get('/lists/:id', async (ctx, next)=> {
+    let id = ctx.params.id;
+    if(id === undefined){
+        return;
+    }
+    try{
+        let sql = "SELECT * FROM post WHERE id=?";
+        let res  = await sqlQuery.query(sql, [~~id]);
+        if(res.length === 0){
+            ctx.response.status = 200;
+            ctx.response.body = {
+                "msg": "文章ID不正确",
+                "status": "-1"
+            }
+            return;
+        }
+        ctx.response.status = 200;
+        ctx.response.body = {
+            "msg": "查询成功",
+            "info": {
+                "data": res
+            },
+            "status": "0"
+        }
+        await next();
+    } catch(err) {
+        ctx.response.status = 500;
+        ctx.response.body = {
+            "msg": err,
+            "status": "-1"
+        }
+    }
+})
 module.exports = articles;
