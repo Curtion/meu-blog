@@ -4,7 +4,7 @@ const publicFunc = new public();
 const articles = new Router();
 const sql = require("../config/sql");
 const sqlQuery = new sql();
-articles.post('/add', async (ctx) => {
+articles.post('/add', async ctx => {
     if(!await publicFunc.checkPermission(ctx)){ //如果没有授权
         return;
     }
@@ -16,7 +16,7 @@ articles.post('/add', async (ctx) => {
     if(resarr.length !== arr.length) {
         ctx.response.status = 200;
         ctx.response.body = {
-            "msg": "参数不能有为空",
+            "msg": "必要参数不能有空",
             "status": "-1"
         }
         return;
@@ -49,12 +49,12 @@ articles.post('/add', async (ctx) => {
     }
 });
 
-articles.get('/lists', async (ctx, next) => {
+articles.get('/lists', async ctx => {
     let data = ctx.request.query;
     if(data === undefined){
         ctx.response.status = 200;
         ctx.response.body = {
-            "msg": "请限制查询条数",
+            "msg": "请携带参数提交查询",
             "status": "-1"
         }
         return;
@@ -62,7 +62,7 @@ articles.get('/lists', async (ctx, next) => {
     if(data.limit === undefined || data.page === undefined){
         ctx.response.status = 200;
         ctx.response.body = {
-            "msg": "参数有误",
+            "msg": "请求参数错误",
             "status": "-1"
         }
         return;
@@ -83,7 +83,6 @@ articles.get('/lists', async (ctx, next) => {
             },
             "status": "0"
         }
-        await next();
     } catch(err) {
         ctx.response.status = 500;
         ctx.response.body = {
@@ -93,7 +92,7 @@ articles.get('/lists', async (ctx, next) => {
     }
 });
 
-articles.get('/lists/:id', async (ctx, next)=> {
+articles.get('/lists/:id', async ctx=> {
     let id = ctx.params.id;
     if(id === undefined){
         return;
@@ -117,7 +116,6 @@ articles.get('/lists/:id', async (ctx, next)=> {
             },
             "status": "0"
         }
-        await next();
     } catch(err) {
         ctx.response.status = 500;
         ctx.response.body = {

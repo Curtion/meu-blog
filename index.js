@@ -25,7 +25,7 @@ app.use(async (ctx, next)=>{
         "status": "0"
     }
     await next();
-})
+});
 
 app.use(router.routes());//把子路由挂载到koa之上
 app.listen(3000);
