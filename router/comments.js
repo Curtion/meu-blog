@@ -5,7 +5,7 @@ const comments = new Router();
 const sql = require("../config/sql");
 const sqlQuery = new sql();
 
-comments.post('/add', async (ctx, next) => {
+comments.post('/add', async (ctx, next) => { //添加评论
     if(!await publicFunc.checkPermission(ctx)){ //如果没有授权
         return;
     }
@@ -42,6 +42,39 @@ comments.post('/add', async (ctx, next) => {
             "status": "0"
         }
     } catch(err){
+        ctx.response.status = 500;
+        ctx.response.body = {
+            "msg": err,
+            "status": "-1"
+        }
+    }
+})
+
+comments.get('/lists/:cid', async ctx=> { //获得文章评论
+    let cid = ctx.params.cid;
+    if(cid === undefined){
+        return;
+    }
+    try{
+        let sql = "SELECT * FROM messages WHERE cid=?";
+        let res  = await sqlQuery.query(sql, [~~cid]);
+        if(res.length === 0){
+            ctx.response.status = 200;
+            ctx.response.body = {
+                "msg": "该文章还没有留言",
+                "status": "-1"
+            }
+            return;
+        }
+        ctx.response.status = 200;
+        ctx.response.body = {
+            "msg": "查询成功",
+            "info": {
+                "data": res
+            },
+            "status": "0"
+        }
+    } catch(err) {
         ctx.response.status = 500;
         ctx.response.body = {
             "msg": err,
