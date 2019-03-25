@@ -38,7 +38,7 @@ token.post('/login', async ctx => {
     ctx.response.status = 200;
     ctx.response.body = {
         "msg": "授权成功！",
-        "data": {
+        "info": {
             "user": post_user,
             "token": tokenid,
         },

@@ -14,6 +14,10 @@
 
 
 
+------
+
+
+
 ## 登陆
 
 ### Request
@@ -48,6 +52,10 @@
 
 
 
+------
+
+
+
 ## 发表文章
 
 ### Request
@@ -71,12 +79,16 @@
 
 
 
-## 查询文章(总)
+------
+
+
+
+## 查询文章列表
 
 ### Request
 
 - Method： **GET**
-- URL： ```/articles/listarticles/lists/?limit=10&page=1```
+- URL： ```/articles/lists/?limit=10&page=1```
 
 | 参数  |        说明        | 是否必须 |
 | :---: | :----------------: | :------: |
@@ -99,4 +111,103 @@
     "status": "0"
 }
 ```
+
+
+
+------
+
+
+
+## 查询文章内容
+
+### Request
+
+- Method：**GET**
+
+- URL：```/articles/lists/:id```
+
+  | 参数 |  说明  |
+  | :--: | :----: |
+  | :id  | 文章ID |
+
+- eg：```/articles/lists/1```
+
+
+
+### Response
+
+```json
+{
+    "msg": "查询成功",
+    "info": {
+        "data": "文章数据"
+    },
+    "status": "0"
+}
+```
+
+
+
+------
+
+
+
+## 提交留言
+
+### Request
+
+- Method：**POST**
+
+- URL：```/comments/add```
+
+  |  参数  |      说明      | 是否必须 |
+  | :----: | :------------: | :------: |
+  |  cid   | 留言所属文章id |    是    |
+  |  post  |    留言内容    |    是    |
+  |  name  |   留言者称呼   |    是    |
+  | email  |   留言者邮箱   |    否    |
+  |  url   |   留言者主页   |    否    |
+  | parent |   父级留言ID   |    是    |
+
+
+
+------
+
+
+
+## 查询文章留言
+
+### Request
+
+- Method：**GET**
+
+- URL：```/comments/lists/:cid```
+
+  | 参数 |  说明  |
+  | :--: | :----: |
+  | :cid | 文章ID |
+
+- eg：```/comments/lists/1```
+
+
+
+### Response
+
+```json
+{
+    "msg": "查询成功",
+    "info": {
+        "data": "留言数据内容"
+    },
+    "status": "0"
+}
+```
+
+
+
+# License
+
+[MIT](https://opensource.org/licenses/MIT)
+
+Copyright (c) 2019, Curtion
 

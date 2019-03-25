@@ -18,5 +18,14 @@ urls.forEach(element => {//循环注册所有子路由
     router.use('/' + element.replace('.js', ''), url.routes(), url.allowedMethods());
 });
 
+app.use(async (ctx, next)=>{
+    ctx.response.status = 200;
+    ctx.response.body = {
+        "msg": "网站已经正常运行中...",
+        "status": "0"
+    }
+    await next();
+});
+
 app.use(router.routes());//把子路由挂载到koa之上
-app.listen(3000);
+app.listen(80);
