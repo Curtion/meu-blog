@@ -68,7 +68,7 @@ articles.get('/lists', async ctx => {
         return;
     }
     try{
-        let sql = "SELECT * FROM post LIMIT ?,?";
+        let sql = "SELECT * FROM post order by id desc LIMIT ?,?";
         let offset = (data.page-1) * data.limit;
         let res  = await sqlQuery.query(sql, [~~offset, ~~data.limit]);
         let count = await sqlQuery.query("SELECT COUNT(*) FROM post");
