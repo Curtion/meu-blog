@@ -1,10 +1,12 @@
 const Koa = require("koa");//web服务库
 const Router = require("koa-router");//koa路由
 const Koapost = require("koa-body");//基于koa的post接收库
+const cors = require('koa2-cors');//跨域
 const app = new Koa();
 const router = new Router();
 const RLRouter = new Router(); //登陆注册接口，单独设置一个路由提前挂载
 
+app.use(cors());
 app.use(Koapost());//获得post信息
 
 let token = require(__dirname + '/config/token.js');//加载登陆注册中间件
