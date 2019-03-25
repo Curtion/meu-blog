@@ -1,4 +1,4 @@
-/*
+﻿/*
  Navicat Premium Data Transfer
 
  Source Server         : 云数据库
@@ -11,7 +11,7 @@
  Target Server Version : 50550
  File Encoding         : 65001
 
- Date: 17/03/2019 12:14:24
+ Date: 25/03/2019 21:22:23
 */
 
 SET NAMES utf8mb4;
@@ -23,10 +23,10 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `kinds`;
 CREATE TABLE `kinds`  (
   `id` int(10) NOT NULL COMMENT 'id',
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '类别名称',
-  `parent` int(10) NOT NULL COMMENT '上级分类',
-  `count` int(255) NOT NULL COMMENT '此分类下的文章数',
-  `time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建时间',
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '类别名称',
+  `parent` int(10) NULL DEFAULT NULL COMMENT '上级分类',
+  `count` int(255) NULL DEFAULT NULL COMMENT '此分类下的文章数',
+  `time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
@@ -51,21 +51,17 @@ CREATE TABLE `messages`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `post`;
 CREATE TABLE `post`  (
-  `id` int(11) NOT NULL COMMENT '帖子ID',
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '发帖用户',
-  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0',
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0',
   `tag` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `kind` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `last_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '上次修改时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of post
--- ----------------------------
-INSERT INTO `post` VALUES (2, 'Curtion', '标题', '内容', '2019-03-17 11:45:38', '标签', '分类', 'NULL');
+  `kind` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `last_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `created`(`time`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 144 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for tag
@@ -73,9 +69,9 @@ INSERT INTO `post` VALUES (2, 'Curtion', '标题', '内容', '2019-03-17 11:45:3
 DROP TABLE IF EXISTS `tag`;
 CREATE TABLE `tag`  (
   `id` int(11) NOT NULL DEFAULT 0,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '标签名称',
-  `count` int(11) NOT NULL COMMENT '此标签下的文章数',
-  `time` datetime NOT NULL COMMENT '创建时间',
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '标签名称',
+  `count` int(11) NULL DEFAULT NULL COMMENT '此标签下的文章数',
+  `time` varchar(0) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
@@ -93,10 +89,5 @@ CREATE TABLE `user`  (
   `introduction` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of user
--- ----------------------------
-INSERT INTO `user` VALUES (0, 'Curtion', '563f4218f5666bd0d4141f2747893ec1', '男', 'curtion@126.com', '13540286608', '学习使人快乐');
 
 SET FOREIGN_KEY_CHECKS = 1;
