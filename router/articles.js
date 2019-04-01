@@ -72,7 +72,11 @@ articles.get('/lists', async ctx => {
         let offset = (data.page-1) * data.limit;
         let res  = await sqlQuery.query(sql, [~~offset, ~~data.limit]);
         let count = await sqlQuery.query("SELECT COUNT(*) FROM post");
-        // let count = await sqlQuery.query("SELECT COUNT(*) FROM messages");
+        res.forEach(async element => {
+            let count = await sqlQuery.query("SELECT count(*) FROM messages WHERE cid = ?", [element.id]);
+            element.msgnum = count[0]["count(*)"]
+        });
+        console.log(res)
         ctx.response.status = 200;
         ctx.response.body = {
             "msg": "查询成功",
