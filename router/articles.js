@@ -104,6 +104,10 @@ articles.get('/lists/:id', async ctx=> {
     try{
         let sql = "SELECT * FROM post WHERE id=?";
         let res  = await sqlQuery.query(sql, [~~id]);
+        let kind = await sqlQuery.query("SELECT * FROM kinds WHERE id=?", [~~res[0].kind]);
+        let name = await sqlQuery.query("SELECT * FROM user WHERE id=?", [~~res[0].name]);
+        res[0].kind = kind[0].name;
+        res[0].name = name[0].name;
         if(res.length === 0){
             ctx.response.status = 200;
             ctx.response.body = {
