@@ -6,9 +6,6 @@ const sql = require("../config/sql");
 const sqlQuery = new sql();
 
 comments.post('/add', async (ctx, next) => { //添加评论
-    if(!await publicFunc.checkPermission(ctx)){ //如果没有授权
-        return;
-    }
     let data = ctx.request.body;
     let arr = ["cid", "post", "name", "parent"];//必填项
     let resarr = arr.filter(ele => {
