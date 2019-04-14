@@ -34,7 +34,7 @@ archive.get('/lists', async ctx => {
                 archiveBlogTime = new Date(DateArr[i]*1000);
                 archiveBlogList.push({
                     year: archiveBlogTime.getFullYear(),
-                    month: archiveBlogTime.getMonth() + 1,
+                    month: archiveBlogTime.getMonth() + 1 < 10 ? '0' + (archiveBlogTime.getMonth() + 1): archiveBlogTime.getMonth() + 1,
                     list: res
                 });
             }
