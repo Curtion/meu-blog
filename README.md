@@ -203,6 +203,35 @@
 }
 ```
 
+## 文章归档
+
+### Request
+
+- Method：**GET**
+- URL：```/archive/lists```
+
+
+
+### Response
+
+```json
+{
+    "msg": "查询成功",
+    "info": {
+        "data": "数据"
+    },
+    "status": "0"
+}
+```
+
+| 字段  |   值   |        说明        |
+| :---: | :----: | :----------------: |
+| year  | Number |      归档年份      |
+| month | Number |      归档月份      |
+| list  | Object | 当前归档时间的列表 |
+
+
+
 
 
 # License
