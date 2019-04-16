@@ -232,7 +232,26 @@
 
 
 
+## 标签云
 
+### Request
+
+- Method：**GET**
+- URL：```/tag/lists/```
+
+### Response
+
+```json
+{
+    "msg": "查询成功",
+    "info": {
+        "data": "标签列表"
+    },
+    "status": "0"
+}
+```
+
+## 
 
 # License
 
