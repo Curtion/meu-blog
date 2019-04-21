@@ -9,7 +9,7 @@ const tokenExpiresTime = config.tokenExpiresTime;//token超时时间
 const jstSecret = config.jstSecret;//token密钥
 
 token.post('/login', async ctx => {
-    if(ctx.request.body.user !== undefined && ctx.request.body.password !== undefined){
+    if(ctx.request.body.user === undefined || ctx.request.body.password === undefined){
         //检查是否存在post数据
         ctx.response.status = 400;
         ctx.response.body = {
