@@ -64,7 +64,7 @@
 
 - URL： ```/articles/add```
 
-- Headers:**authorization:you_token**
+- Headers：**authorization:you_token**
 
 - Body:
 
@@ -232,12 +232,12 @@
 
 
 
-## 标签云
+## 标签列表
 
 ### Request
 
 - Method：**GET**
-- URL：```/tag/lists/```
+- URL：```/tags/lists/```
 
 ### Response
 
@@ -251,7 +251,43 @@
 }
 ```
 
-## 
+
+
+## 添加标签
+
+### Request
+
+- Method：**POST**
+
+- URL：```/tags/add/```
+
+- Headers：**authorization:you_token**
+
+  | 参数 |   说明   |
+  | :--: | :------: |
+  | name | 标签名字 |
+
+
+
+## 删除标签
+
+### Request
+
+- Method：**DELETE**
+
+- URL：```/tags/delete/?id=:id```
+
+- Headers：**authorization:you_token**
+
+  | 参数 |  说明  |
+  | :--: | :----: |
+  |  id  | 标签ID |
+
+  
+
+
+
+
 
 # License
 
