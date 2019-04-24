@@ -72,7 +72,7 @@ tags.delete('/delete', async ctx => {
         return;
     }
     let data = ctx.query;
-    if(data.id === '') {
+    if(data.id === '' || data.id === undefined) {
         ctx.response.status = 200;
         ctx.response.body = {
             "msg": "必要参数不能有空",
