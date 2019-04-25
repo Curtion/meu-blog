@@ -82,7 +82,7 @@ kinds.delete('/delete', async ctx => {
     }
     try{
         let sql = "DELETE FROM kinds WHERE id=?";
-        let res = await sqlQuery.query(sql, [+data.id]); //执行标签删除语句
+        let res = await sqlQuery.query(sql, [+data.id]); //执行分类删除语句
         if(res.affectedRows !== 1){
             ctx.response.status = 200;
             ctx.response.body = {
