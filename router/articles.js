@@ -23,8 +23,9 @@ articles.post('/add', async (ctx) => {
     }
     try{
         let id = publicFunc.checkMaxId(await sqlQuery.query("SELECT MAX(id) FROM post")) + 1;
-        let date = publicFunc.pattern("yyyy-MM-dd HH:mm:ss");
-        let arg = [id, ctx.state.username, data.title, data.content, date, data.tag, data.kind, "NULL"];
+        let date = Math.floor(new Date().getTime()/1000);
+        let userid = await sqlQuery.query("SELECT id FROM user WHERE name=?", [ctx.state.username]);
+        let arg = [id, userid[0].id, data.title, data.content, date, data.tag, data.kind, date];
         let sql = "INSERT INTO post (id, name, title, content, time, tag, kind, last_time) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)";
         let res = await sqlQuery.query(sql,arg); //执行文章添加语句
         if(res.affectedRows !== 1){

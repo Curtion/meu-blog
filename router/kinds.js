@@ -44,7 +44,7 @@ kinds.post('/add', async ctx => {
     try{
         let date = Math.floor(new Date().getTime()/1000);
         let id = publicFunc.checkMaxId(await sqlQuery.query("SELECT MAX(id) FROM kinds")) + 1;
-        let sql = "INSERT INTO tag (id, name, parent, count, time) VALUES (?, ?, ?, ?, ?)";
+        let sql = "INSERT INTO kinds (id, name, parent, count, time) VALUES (?, ?, ?, ?, ?)";
         let res = await sqlQuery.query(sql, [id, data.name, data.parent, 0, date]); //执行标签添加语句
         if(res.affectedRows !== 1){
             ctx.response.status = 200;
