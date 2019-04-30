@@ -24,6 +24,11 @@ articles.post('/add', async (ctx) => {
     try{
         let id = publicFunc.checkMaxId(await sqlQuery.query("SELECT MAX(id) FROM post")) + 1;
         let date = Math.floor(new Date().getTime()/1000);
+        let tagList = data.tag.split(',')
+        for(let i = 0;i < tagList.length;i++) {
+            await sqlQuery.query("UPDATE tag SET count=count+1 where id = ?", [tagList[i]]);
+        }
+        await sqlQuery.query("UPDATE kinds SET count=count+1 where id = ?", [data.kind]);
         let userid = await sqlQuery.query("SELECT id FROM user WHERE name=?", [ctx.state.username]);
         let arg = [id, userid[0].id, data.title, data.content, date, data.tag, data.kind, date];
         let sql = "INSERT INTO post (id, name, title, content, time, tag, kind, last_time) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)";
