@@ -146,4 +146,41 @@ articles.get('/lists/:id', async ctx=> {
         }
     }
 })
+articles.delete('/delete', async ctx => {
+    if(!await publicFunc.checkPermission(ctx)){ //检查是否授权
+        return;
+    }
+    let data = ctx.query;
+    if(data.id === '' || data.id === undefined) {
+        ctx.response.status = 200;
+        ctx.response.body = {
+            "msg": "必要参数不能有空",
+            "status": "-1"
+        }
+        return;
+    }
+    try{
+        let sql = "DELETE FROM post WHERE id=?";
+        let res = await sqlQuery.query(sql, [+data.id]); //执行分类删除语句
+        if(res.affectedRows !== 1){
+            ctx.response.status = 200;
+            ctx.response.body = {
+                "msg": "删除失败",
+                "status": "-1"
+            }
+            return;
+        }
+        ctx.response.status = 200;
+        ctx.response.body = {
+            "msg": "删除成功",
+            "status": "0"
+        }
+    } catch(err){
+        ctx.response.status = 500;
+        ctx.response.body = {
+            "msg": err,
+            "status": "-1"
+        }
+    }
+})
 module.exports = articles;
