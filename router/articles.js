@@ -84,7 +84,7 @@ articles.get('/lists', async ctx => {
             let kind = await sqlQuery.query("SELECT name FROM kinds WHERE id = ?", [res[i].kind]);
             if(kind[0] !== undefined ) {
                 if (kind[0].hasOwnProperty('name')) {
-                    res[i].kind = kind[0].name
+                    res[i].kindname = kind[0].name
                 }
             }
         }
