@@ -81,6 +81,12 @@ articles.get('/lists', async ctx => {
         for(let i = 0;i < res.length; i++){
             let msgcount = await sqlQuery.query("SELECT count(*) FROM messages WHERE cid = ?", [res[i].id]);
             res[i].msgnum = msgcount[0]["count(*)"]
+            let kind = await sqlQuery.query("SELECT name FROM kinds WHERE id = ?", [res[i].kind]);
+            if(kind[0] !== undefined ) {
+                if (kind[0].hasOwnProperty('name')) {
+                    res[i].kind = kind[0].name
+                }
+            }
         }
         ctx.response.status = 200;
         ctx.response.body = {
