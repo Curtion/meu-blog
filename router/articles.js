@@ -24,11 +24,6 @@ articles.post('/add', async (ctx) => {
     try{
         let id = publicFunc.checkMaxId(await sqlQuery.query("SELECT MAX(id) FROM post")) + 1;
         let date = Math.floor(new Date().getTime()/1000);
-        let tagList = data.tag.split(',')
-        for(let i = 0;i < tagList.length;i++) {
-            await sqlQuery.query("UPDATE tag SET count=count+1 where id = ?", [tagList[i]]);
-        }
-        await sqlQuery.query("UPDATE kinds SET count=count+1 where id = ?", [data.kind]);
         let userid = await sqlQuery.query("SELECT id FROM user WHERE name=?", [ctx.state.username]);
         let arg = [id, userid[0].id, data.title, data.content, date, data.tag, data.kind, date];
         let sql = "INSERT INTO post (id, name, title, content, time, tag, kind, last_time) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -37,6 +32,50 @@ articles.post('/add', async (ctx) => {
             ctx.response.status = 200;
             ctx.response.body = {
                 "msg": "发表失败",
+                "status": "-1"
+            }
+            return;
+        }
+        ctx.response.status = 200;
+        ctx.response.body = {
+            "msg": "提交成功",
+            "status": "0"
+        }
+    } catch(err){
+        ctx.response.status = 500;
+        ctx.response.body = {
+            "msg": err,
+            "status": "-1"
+        }
+    }
+});
+
+articles.put('/updata', async (ctx) => {
+    if(!await publicFunc.checkPermission(ctx)){ //检查是否授权
+        return;
+    }
+    let data = ctx.request.body;
+    let arr = ["title", "content", "tag", "kind"];//必填项
+    let resarr = arr.filter(ele => {
+        return data.hasOwnProperty(ele);
+    });
+    if(resarr.length !== arr.length) {
+        ctx.response.status = 200;
+        ctx.response.body = {
+            "msg": "必要参数不能有空",
+            "status": "-1"
+        }
+        return;
+    }
+    try{
+        let date = Math.floor(new Date().getTime()/1000);
+        let sql = "UPDATE post SET title=?, content=?, tag=?, kind=?, last_time=? where id = ?";
+        let arg = [data.title, data.content,data.tag, data.kind, date, date.id];
+        let res = await sqlQuery.query(sql,arg); //执行文章更新语句
+        if(res.affectedRows !== 1){
+            ctx.response.status = 200;
+            ctx.response.body = {
+                "msg": "更新失败",
                 "status": "-1"
             }
             return;
