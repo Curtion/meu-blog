@@ -4,6 +4,7 @@ const publicFunc = new public();
 const articles = new Router();
 const sql = require("../config/sql");
 const sqlQuery = new sql();
+const mysql = require("mysql");//mysql操作库
 articles.post('/add', async (ctx) => {
     if(!await publicFunc.checkPermission(ctx)){ //检查是否授权
         return;
@@ -216,6 +217,45 @@ articles.delete('/delete', async ctx => {
             "status": "0"
         }
     } catch(err){
+        ctx.response.status = 500;
+        ctx.response.body = {
+            "msg": err,
+            "status": "-1"
+        }
+    }
+})
+articles.get('/search', async ctx=> {
+    let content = decodeURI(ctx.request.url.split('content=')[1]);
+    if( content === ''){
+        ctx.response.status = 200;
+        ctx.response.body = {
+            "msg": "请携带参数提交查询",
+            "status": "-1"
+        }
+        return;
+    }
+    try{
+        let sql = "SELECT * FROM post WHERE title LIKE " + mysql.escape("%"+content+"%");
+        let res  = await sqlQuery.query(sql);
+        for(let i = 0;i < res.length; i++){
+            let msgcount = await sqlQuery.query("SELECT count(*) FROM messages WHERE cid = ?", [res[i].id]);
+            res[i].msgnum = msgcount[0]["count(*)"]
+            let kind = await sqlQuery.query("SELECT name FROM kinds WHERE id = ?", [res[i].kind]);
+            if(kind[0] !== undefined ) {
+                if (kind[0].hasOwnProperty('name')) {
+                    res[i].kindname = kind[0].name
+                }
+            }
+        }
+        ctx.response.status = 200;
+        ctx.response.body = {
+            "msg": "查询成功",
+            "info": {
+                "data": res
+            },
+            "status": "0"
+        }
+    } catch(err) {
         ctx.response.status = 500;
         ctx.response.body = {
             "msg": err,
