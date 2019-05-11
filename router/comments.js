@@ -1,3 +1,4 @@
+const sendMail = require("../functions/mailer");
 const Router = require("koa-router");
 const public = require("../functions/publicFunc");
 const publicFunc = new public();
@@ -38,6 +39,7 @@ comments.post('/add', async (ctx, next) => { //添加评论
             "msg": "提交成功",
             "status": "0"
         }
+        sendMail.send()
     } catch(err){
         ctx.response.status = 500;
         ctx.response.body = {

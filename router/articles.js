@@ -73,7 +73,6 @@ articles.put('/updata', async (ctx) => {
         let sql = "UPDATE post SET title=?, content=?, tag=?, kind=?, last_time=? where id = ?";
         let arg = [data.title, data.content,data.tag, data.kind, date, data.id];
         let res = await sqlQuery.query(sql,arg); //执行文章更新语句
-        console.log(res)
         if(res.affectedRows !== 1){
             ctx.response.status = 200;
             ctx.response.body = {
