@@ -12,7 +12,6 @@ tags.get('/lists', async ctx => {
         for (index in res)  {
             res[index].count = (await sqlQuery.query(rescount, [res[index].id]))[0]['COUNT(*)']; // 查询标签所属文章数量
         }
-        console.log(res)
         ctx.response.status = 200;
         ctx.response.body = {
             "msg": "查询成功",

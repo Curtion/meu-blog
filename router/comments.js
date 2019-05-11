@@ -5,7 +5,7 @@ const publicFunc = new public();
 const comments = new Router();
 const sql = require("../config/sql");
 const sqlQuery = new sql();
-
+var wc = require('word-sensitive')
 comments.post('/add', async (ctx, next) => { //添加评论
     let data = ctx.request.body;
     let arr = ["cid", "post", "name", "parent"];//必填项
@@ -57,7 +57,7 @@ comments.post('/add', async (ctx, next) => { //添加评论
     }
 })
 
-comments.get('/lists/:cid', async ctx=> { //获得文章评论
+comments.get('/lists/:cid', async ctx=> { //获得文章评论 前台使用
     let cid = ctx.params.cid;
     if(cid === undefined){
         return;
@@ -72,6 +72,9 @@ comments.get('/lists/:cid', async ctx=> { //获得文章评论
                 "status": "-1"
             }
             return;
+        }
+        for(let i = 0; i< res.length; i++) {
+            res[0].post = wc.filter(res[0].post) // 垃圾评论过滤
         }
         ctx.response.status = 200;
         ctx.response.body = {
@@ -90,7 +93,7 @@ comments.get('/lists/:cid', async ctx=> { //获得文章评论
     }
 })
 
-comments.get('/lists', async ctx=> { //获得所有
+comments.get('/lists', async ctx=> { //获得所有 后台接口使用
     try{
         let sql = "SELECT * FROM messages";
         let res  = await sqlQuery.query(sql);
