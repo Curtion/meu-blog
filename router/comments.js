@@ -39,7 +39,15 @@ comments.post('/add', async (ctx, next) => { //添加评论
             "msg": "提交成功",
             "status": "0"
         }
-        sendMail.send()
+        sendMail.send({
+            from: '"竹影流浪" <curtion@126.com>', // login user must equel to this user
+            to: 'icurtion@gmail.com',
+            subject: '竹影流浪：您有新的留言',
+            html: `<div style="margin: 16px 40px; background-color: #eef2fa; border: 1px solid #d8e3e8; padding: 0 15px; -moz-border-radius:5px; -webkit-border-radius:5px; -khtml-border-radius:5px; border-radius:5px;">
+                <p>竹影流浪：<a target="_blank" href="http://127.0.0.1:8080/articles/${data.cid}">http://127.0.0.1:8080/articles/${data.cid}</a></strong>&nbsp;有新的评论</p>
+                <p><strong>${data.name}</strong>&nbsp;评论说：${data.post}</p> <p>时间：${date}<br />邮箱：${data.email}<br /></p>
+            </div>`
+        })
     } catch(err){
         ctx.response.status = 500;
         ctx.response.body = {
