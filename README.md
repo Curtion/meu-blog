@@ -18,7 +18,7 @@
 
 
 
-## 登陆
+# 登陆
 
 ### Request
 
@@ -50,11 +50,32 @@
 }
 ```
 
+# 文章归档
 
+### Request
 
-------
+- Method：**GET**
+- URL：```/archive/lists```
 
+### Response
 
+```json
+{
+    "msg": "查询成功",
+    "info": {
+        "data": "数据"
+    },
+    "status": "0"
+}
+```
+
+| 字段  |   值   |        说明        |
+| :---: | :----: | :----------------: |
+| year  | Number |      归档年份      |
+| month | Number |      归档月份      |
+| list  | Object | 当前归档时间的列表 |
+
+# 文章相关
 
 ## 发表文章
 
@@ -79,11 +100,28 @@
 
 
 
-------
+## 更新文章
 
+### Request
 
+- Method： **PUT**
 
-## 查询文章列表
+- URL： ```/articles/updata```
+
+- Headers：**authorization:you_token**
+
+- Body:
+
+  ```json
+  {
+      "title": "文章标题",
+      "content": "文章内容",
+      "tag": "文章标签,逗号分隔",
+      "kind": "文章分类,逗号分隔"
+  }
+  ```
+
+## 文章列表
 
 ### Request
 
@@ -94,8 +132,6 @@
 | :---: | :----------------: | :------: |
 | limit | 每次查询的文章数量 |    是    |
 | page  |  查询的页码(>=1)   |    是    |
-
-
 
 ### Response
 
@@ -112,13 +148,7 @@
 }
 ```
 
-
-
-------
-
-
-
-## 查询文章内容
+## 文章内容
 
 ### Request
 
@@ -131,8 +161,6 @@
   | :id  | 文章ID |
 
 - eg：```/articles/lists/1```
-
-
 
 ### Response
 
@@ -148,9 +176,49 @@
 
 
 
-------
+## 删除文章
+
+### Request
+
+- Method：**DELETE**
+
+- URL：```/articles/lists/:id```
+
+  | 参数 |  说明  |
+  | :--: | :----: |
+  | :id  | 文章ID |
+
+- eg：```/articles/delete/?id=1```
+
+## 文章搜索
+
+### Request
+
+- Method：**GET**
+
+- URL：```/articles/search/```
+
+  |  参数   |           说明           |
+  | :-----: | :----------------------: |
+  | content | 搜索内容(暂时只搜索标题) |
+
+- eg：```/articles/search/?content=数据结构```
+
+### Response
+
+```json
+{
+    "msg": "查询成功",
+    "info": {
+        "data": "文章数据"
+    },
+    "status": "0"
+}
+```
 
 
+
+# 留言相关
 
 ## 提交留言
 
@@ -168,10 +236,6 @@
   | email  |   留言者邮箱   |    否    |
   |  url   |   留言者主页   |    否    |
   | parent |   父级留言ID   |    是    |
-
-
-
-------
 
 
 
@@ -203,14 +267,13 @@
 }
 ```
 
-## 文章归档
+## 留言列表
 
 ### Request
 
 - Method：**GET**
-- URL：```/archive/lists```
-
-
+- URL：```/comments/lists```
+- info：**(所有留言，后台使用)**
 
 ### Response
 
@@ -218,19 +281,84 @@
 {
     "msg": "查询成功",
     "info": {
-        "data": "数据"
+        "data": "留言数据内容"
     },
     "status": "0"
 }
 ```
 
-| 字段  |   值   |        说明        |
-| :---: | :----: | :----------------: |
-| year  | Number |      归档年份      |
-| month | Number |      归档月份      |
-| list  | Object | 当前归档时间的列表 |
+## 删除留言
+
+### Request
+
+- Method：**DELETE**
+
+- URL：```/comments/delete/?id=:id```
+
+- Headers：**authorization:you_token**
+
+  | 参数 |  说明  |
+  | :--: | :----: |
+  |  id  | 留言ID |
+
+# 分类相关
+
+## 分类列表
+
+### Request
+
+- Method：**GET**
+- URL：```/kinds/lists/```
+
+### Response
+
+```json
+{
+    "msg": "查询成功",
+    "info": {
+        "data": "分类列表"
+    },
+    "status": "0"
+}
+```
 
 
+
+## 添加分类
+
+### Request
+
+- Method：**POST**
+
+- URL：```/kinds/add/```
+
+- Headers：**authorization:you_token**
+
+  |  参数  |           说明           |
+  | :----: | :----------------------: |
+  |  name  |         分类名字         |
+  | parent | 父级ID(未实现，传任意值) |
+
+
+
+## 删除分类
+
+### Request
+
+- Method：**DELETE**
+
+- URL：```/kinds/delete/?id=:id```
+
+- Headers：**authorization:you_token**
+
+  | 参数 |  说明  |
+  | :--: | :----: |
+  |  id  | 分类ID |
+
+
+
+
+# 标签相关
 
 ## 标签列表
 
@@ -282,12 +410,6 @@
   | 参数 |  说明  |
   | :--: | :----: |
   |  id  | 标签ID |
-
-  
-
-
-
-
 
 # License
 
